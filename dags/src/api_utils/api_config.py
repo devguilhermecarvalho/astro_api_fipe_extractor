@@ -1,8 +1,12 @@
 # src/api_utils/api_config.py
+# Configurações da API FIPE, incluindo URLs, cabeçalhos e caminhos para salvar os dados.
+
 
 BASE_URL = "https://veiculos.fipe.org.br/api/veiculos"
-BASE_STORAGE_PATH = "storage/raw"
+BASE_STORAGE_PATH = "data/raw"
 COMMON_HEADERS = {"Content-Type": "application/json"}
+
+CODIGO_TABELA_REFERENCIA = 312
 
 API_INFO = {
     "fipe_tabela_referencia": {

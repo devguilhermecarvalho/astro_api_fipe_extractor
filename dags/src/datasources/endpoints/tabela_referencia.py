@@ -16,8 +16,3 @@ class ExtractorTabelaDeReferencia(BaseExtractor):
         self.extractor_tools.save_to_json(
             self._tabela_de_referencia, API_INFO['fipe_tabela_referencia']['save_path']
         )
-
-        # Conecta ao banco de dados e cria a tabela
-        db_tools = DatabaseTools()
-        db_tools.create_table("tabela_referencia", self._tabela_de_referencia)
-        db_tools.close_connection()
