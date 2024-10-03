@@ -1,10 +1,11 @@
-# src/api_utils/api_config.py
+# /dags/src/api_utils/api_config.py
 # Configurações da API FIPE, incluindo URLs, cabeçalhos e caminhos para salvar os dados.
 
+from typing import Dict
 
 BASE_URL = "https://veiculos.fipe.org.br/api/veiculos"
 BASE_STORAGE_PATH = "data/raw"
-COMMON_HEADERS = {"Content-Type": "application/json"}
+COMMON_HEADERS: Dict[str, str] = {"Content-Type": "application/json"}
 
 CODIGO_TABELA_REFERENCIA = 312
 

@@ -1,32 +1,37 @@
-# src/interfaces/base_extractor_interface.py
+# /dags/src/interfaces/base_extractor_interface.py
 # Classe base abstrata para os extratores, implementando o padrão Template Method.
 
 from abc import ABC, abstractmethod
-from src.api_utils.api_extractor_tools import ExtractorTools
+from typing import Any, Type, TypeVar, Generic
 import logging
 
-class BaseExtractorInterface(ABC):
-    def __init__(self, url, request_class):
-        self._connector = request_class(url)
+from src.api_utils.api_extractor_tools import ExtractorTools
+from src.api_utils.api_connection import BaseConnector
+
+TRequestClass = TypeVar('TRequestClass', bound=BaseConnector)
+
+class BaseExtractorInterface(ABC, Generic[TRequestClass]):
+    def __init__(self, url: str, request_class: Type[TRequestClass]) -> None:
+        self._connector: TRequestClass = request_class(url)
         self._extractor_tools = ExtractorTools()
 
     @property
-    def connector(self):
+    def connector(self) -> TRequestClass:
         return self._connector
 
     @property
-    def extractor_tools(self):
+    def extractor_tools(self) -> ExtractorTools:
         return self._extractor_tools
 
     @abstractmethod
-    def get_endpoint_data(self):
+    def get_endpoint_data(self) -> None:
         pass
 
     @abstractmethod
-    def saving_endpoint_data(self):
+    def saving_endpoint_data(self) -> None:
         pass
 
-    def main(self):
+    def main(self) -> None:
         """
         Método Template que executa o fluxo de extração de dados e salvamento.
         """

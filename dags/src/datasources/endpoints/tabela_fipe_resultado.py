@@ -1,4 +1,4 @@
-# src/datasources/endpoints/tabela_fipe_resultado.py
+# /dags/src/datasources/endpoints/tabela_fipe_resultado.py
 # Classe para obter os resultados da tabela FIPE para cada veículo.
 
 import pandas as pd
@@ -7,14 +7,17 @@ import time
 import os
 import ast
 import logging
+from typing import Optional, Dict, Any, List
+
 from src.api_utils.api_connection import BaseConnector
 from src.api_utils.api_config import CODIGO_TABELA_REFERENCIA
 
 class RequestFipeResultado(BaseConnector):
-    def __init__(self, url, headers=None):
+    def __init__(self, url: str, headers: Optional[Dict[str, str]] = None) -> None:
         super().__init__(url, headers)
+        self.expanded_df: pd.DataFrame = pd.DataFrame()
 
-    def transforming_dataframe(self):
+    def transforming_dataframe(self) -> None:
         """
         Transforma o DataFrame de resultados brutos em um formato expandido,
         contendo as informações dos veículos e seus respectivos anos e combustíveis.
@@ -27,7 +30,7 @@ class RequestFipeResultado(BaseConnector):
             "ResultadoTiposVeiculo": "cod_veiculo_especifico"
         }, inplace=True)
 
-        expanded_rows = []
+        expanded_rows: List[Dict[str, Any]] = []
         for _, row in df.iterrows():
             try:
                 cod_veiculo_especifico_list = ast.literal_eval(row['cod_veiculo_especifico'])
@@ -51,7 +54,7 @@ class RequestFipeResultado(BaseConnector):
         expanded_df.rename(columns={"Label": "ano_combustivel", "Value": "ano_cod_combustivel"}, inplace=True)
         self.expanded_df = expanded_df
 
-    def get_tabela_de_resultado_fipe(self):
+    def get_tabela_de_resultado_fipe(self) -> None:
         """
         Processa os dados da tabela FIPE, dividindo em partes e realizando requisições para cada modelo e veículo específico.
         """
@@ -75,7 +78,7 @@ class RequestFipeResultado(BaseConnector):
                 continue
 
             logging.info(f"Processando parte {i+1}.")
-            resultados_tabela_fipe = []
+            resultados_tabela_fipe: List[Optional[Dict[str, Any]]] = []
             for _, row in parte.iterrows():
                 payload = {
                     "codigoTabelaReferencia": CODIGO_TABELA_REFERENCIA,
@@ -103,11 +106,11 @@ class RequestFipeResultado(BaseConnector):
 
         logging.info("Processamento concluído.")
 
-    def _retry_request(self, payload, max_retries=5):
+    def _retry_request(self, payload: Dict[str, Any], max_retries: int = 5) -> Optional[Dict[str, Any]]:
         """
         Realiza a requisição com várias tentativas em caso de erro, utilizando a lógica de backoff.
         """
-        response = None
+        response: Optional[Dict[str, Any]] = None
         for attempt in range(1, max_retries + 1):
             try:
                 response = self.post(data=payload)

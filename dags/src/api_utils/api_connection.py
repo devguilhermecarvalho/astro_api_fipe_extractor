@@ -1,4 +1,4 @@
-# src/api_utils/api_connection.py
+# /dags/src/api_utils/api_connection.py
 # BaseConnector: responsável por realizar as conexões com a API, lidando com tentativas e tratamento de erros.
 
 import requests
@@ -6,6 +6,7 @@ import time
 import logging
 import os
 from datetime import datetime
+from typing import Optional, Dict, Any
 
 # Configuração do logger para salvar logs em arquivos diários
 LOG_DIR = 'logs'
@@ -22,13 +23,19 @@ logging.basicConfig(
 )
 
 class BaseConnector:
-    def __init__(self, url, headers=None, max_retries=3, delay=1.5):
+    def __init__(
+        self,
+        url: str,
+        headers: Optional[Dict[str, str]] = None,
+        max_retries: int = 3,
+        delay: float = 1.5
+    ) -> None:
         self.url = url
         self.headers = headers or {}
         self.max_retries = max_retries
         self.delay = delay
 
-    def post(self, data=None):
+    def post(self, data: Optional[Dict[str, Any]] = None) -> Optional[Dict[str, Any]]:
         retries = 0
         while retries < self.max_retries:
             try:

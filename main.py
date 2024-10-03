@@ -1,14 +1,14 @@
 # main.py
 # Arquivo principal para executar os extratores.
 
-from src.api_utils.api_config import API_INFO
-from src.datasources.endpoints.carros_marcas import RequestCarrosMarcas
-from src.datasources.endpoints.carros_modelos import RequestCarrosPorModelos
-from src.datasources.endpoints.carros_modelos_por_ano import RequestModelosPorAno
-from src.datasources.endpoints.tabela_fipe_resultado import RequestFipeResultado
-from src.datasources.endpoints.tabela_fipe_de_referencia import RequestFipeTabelaReferencia
+from dags.src.api_utils.api_config import API_INFO
+from dags.src.datasources.endpoints.carros_marcas import RequestCarrosMarcas
+from dags.src.datasources.endpoints.carros_modelos import RequestCarrosPorModelos
+from dags.src.datasources.endpoints.carros_modelos_por_ano import RequestModelosPorAno
+from dags.src.datasources.endpoints.tabela_fipe_resultado import RequestFipeResultado
+from dags.src.datasources.endpoints.tabela_fipe_de_referencia import RequestFipeTabelaReferencia
 
-from src.datasources.endpoints.extractors import (
+from dags.src.datasources.endpoints.extractors import (
     ExtractorCarrosMarcas,
     ExtractorCarrosPorModelos,
     ExtractorCarrosModelosPorAno,
@@ -16,7 +16,7 @@ from src.datasources.endpoints.extractors import (
     ExtractorFipeTabelaReferencia
 )
 
-def main():
+def main() -> None:
     extractors = [
         ExtractorFipeTabelaReferencia(API_INFO['fipe_tabela_referencia']['url'], RequestFipeTabelaReferencia),
         ExtractorCarrosMarcas(API_INFO['carros_marcas']['url'], RequestCarrosMarcas),
