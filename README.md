@@ -1,4 +1,4 @@
-# Projeto de Extração de Dados da API FIPE
+# Projeto: Extração de Dados das tabelas de Preço Médio de Veículos da Fundação Instituto de Pesquisas Econômicas (FIPE) (https://veiculos.fipe.org.br/)
 
 Este projeto tem como objetivo extrair dados da API FIPE utilizando um ambiente Astronomer com Airflow para orquestração das tarefas que facilita o gerenciamento e implantação de fluxos de trabalho.
 
@@ -28,7 +28,7 @@ Este projeto tem como objetivo extrair dados da API FIPE utilizando um ambiente 
 - Verifique e instale o docker na sua máquina.
 
 1. Faça a cópia do projeto:
-   1. CMD: `git clone`
+   1. CMD: `git clone ...`
 2. Faça o download e instalação do Astronomer:
    1. CMD: `curl -sSL https://install.astronomer.io | sudo bash`
 3. Preparando o ambiente virtual na pasta do projeto:
