@@ -30,8 +30,12 @@ Este projeto tem como objetivo extrair dados da API FIPE utilizando um ambiente 
 - Verifique e instale o docker na sua máquina.
 
 1. Faça a cópia do projeto:
+<<<<<<< HEAD
 
    1. CMD: `git clone`
+=======
+   1. CMD: `git clone ...`
+>>>>>>> 73f331439874b1f92939c893da97ddf9b8a1dd36
 2. Faça o download e instalação do Astronomer:
 
    1. CMD: `curl -sSL https://install.astronomer.io | sudo bash`
