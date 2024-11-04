@@ -1,33 +1,26 @@
-# dags/extract_data_dag.py
-# DAG principal para extração de dados usando Airflow.
-
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from datetime import datetime, timedelta
-import sys
-import os
 
-sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
-
-from datasources.endpoints.extractors import (
+from include.datasources.endpoints.extractors import (
     ExtractorFipeTabelaReferencia,
     ExtractorCarrosMarcas,
     ExtractorCarrosPorModelos,
     ExtractorCarrosModelosPorAno,
-    ExtractorTabelaFipeResultado
+    ExtractorTabelaFipeResultado,
 )
 
-from api_utils.api_config import API_INFO
-from datasources.endpoints.tabela_fipe_de_referencia import RequestFipeTabelaReferencia
-from datasources.endpoints.carros_marcas import RequestCarrosMarcas
-from datasources.endpoints.carros_modelos import RequestCarrosPorModelos
-from datasources.endpoints.carros_modelos_por_ano import RequestModelosPorAno
-from datasources.endpoints.tabela_fipe_resultado import RequestFipeResultado
+from include.api_utils.api_config import API_INFO
+from include.datasources.endpoints.tabela_fipe_de_referencia import RequestFipeTabelaReferencia
+from include.datasources.endpoints.carros_marcas import RequestCarrosMarcas
+from include.datasources.endpoints.carros_modelos import RequestCarrosPorModelos
+from include.datasources.endpoints.carros_modelos_por_ano import RequestModelosPorAno
+from include.datasources.endpoints.tabela_fipe_resultado import RequestFipeResultado
 
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
-    'email': ['guilhermerdcarvalho@gmail.com'],
+    'email': ['seu_email@example.com'],
     'email_on_failure': False,
     'email_on_retry': False,
     'retries': 0,
@@ -44,23 +37,33 @@ dag = DAG(
 )
 
 def extract_tabela_referencia(**context):
-    extractor = ExtractorFipeTabelaReferencia(API_INFO['fipe_tabela_referencia']['url'], RequestFipeTabelaReferencia)
+    extractor = ExtractorFipeTabelaReferencia(
+        API_INFO['fipe_tabela_referencia']['url'], RequestFipeTabelaReferencia
+    )
     extractor.main()
 
 def extract_carros_marcas(**context):
-    extractor = ExtractorCarrosMarcas(API_INFO['carros_marcas']['url'], RequestCarrosMarcas)
+    extractor = ExtractorCarrosMarcas(
+        API_INFO['carros_marcas']['url'], RequestCarrosMarcas
+    )
     extractor.main()
 
 def extract_carros_modelos(**context):
-    extractor = ExtractorCarrosPorModelos(API_INFO['carros_modelos']['url'], RequestCarrosPorModelos)
+    extractor = ExtractorCarrosPorModelos(
+        API_INFO['carros_modelos']['url'], RequestCarrosPorModelos
+    )
     extractor.main()
 
 def extract_carros_modelos_por_ano(**context):
-    extractor = ExtractorCarrosModelosPorAno(API_INFO['carros_ano_modelo']['url'], RequestModelosPorAno)
+    extractor = ExtractorCarrosModelosPorAno(
+        API_INFO['carros_ano_modelo']['url'], RequestModelosPorAno
+    )
     extractor.main()
 
 def extract_tabela_fipe_resultado(**context):
-    extractor = ExtractorTabelaFipeResultado(API_INFO['resultado_tabela_fipe']['url'], RequestFipeResultado)
+    extractor = ExtractorTabelaFipeResultado(
+        API_INFO['resultado_tabela_fipe']['url'], RequestFipeResultado
+    )
     extractor.main()
 
 task_extract_tabela_referencia = PythonOperator(
@@ -93,5 +96,4 @@ task_extract_tabela_fipe_resultado = PythonOperator(
     dag=dag,
 )
 
-# Definição das dependências entre as tarefas
 task_extract_tabela_referencia >> task_extract_carros_marcas >> task_extract_carros_modelos >> task_extract_carros_modelos_por_ano >> task_extract_tabela_fipe_resultado

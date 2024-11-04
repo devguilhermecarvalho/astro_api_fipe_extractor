@@ -1,6 +1,6 @@
 # Projeto de Extração de Dados da API FIPE
 
-Este projeto tem como objetivo extrair dados da API FIPE, processar e salvar as informações para uso posterior.
+Este projeto tem como objetivo extrair dados da API FIPE utilizando um ambiente Astronomer com Airflow para orquestração das tarefas que facilita o gerenciamento e implantação de fluxos de trabalho.
 
 ## Funcionalidades
 
@@ -19,7 +19,28 @@ Este projeto tem como objetivo extrair dados da API FIPE, processar e salvar as 
 - `data/raw/`: Pasta onde os dados extraídos são salvos.
 - `logs/`: Pasta onde os logs diários são armazenados.
 
-## Como Executar
+## Pré-requisitos
 
-1. Certifique-se de ter o Python 3.6 ou superior instalado.
-2. Instale as dependências com o comando:
+- Docker instalado.
+
+## Como Executar no Ubuntu
+
+- Verifique e instale o docker na sua máquina.
+
+1. Faça a cópia do projeto:
+   1. CMD: `git clone`
+2. Faça o download e instalação do Astronomer:
+   1. CMD: `curl -sSL https://install.astronomer.io | sudo bash`
+3. Preparando o ambiente virtual na pasta do projeto:
+   1. Criando ambiente virtual: `python3 -m venv venv`
+   2. Ativando o ambiente virtual: `source venv/bin/activate`
+   3. Instale as bibliotecas: `pip install -r requirements.txt`
+4. Execute o Astronomer:
+   1. CMD: `astro dev start`
+   2. Abra o navegador e acesse: http://localhost:8080
+
+5. Executar a DAG:
+   1. Na interface do Airflow, ative a DAG `extract_data_dag` e aguarde sua execução.
+
+6. Encerre a execução:
+   1. CMD: `astro dev stop`

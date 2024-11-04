@@ -1,5 +1,3 @@
-# src/datasources/endpoints/tabela_referencia.py
-
 from src.api_utils.api_config import API_INFO
 from src.api_utils.api_extractor_tools import ExtractorTools
 
