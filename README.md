@@ -1,56 +1,65 @@
-# Projeto: Extração de Dados das tabelas de Preço Médio de Veículos da Fundação Instituto de Pesquisas Econômicas (FIPE) (https://veiculos.fipe.org.br/)
+# FIPE Vehicle Price Extractor — Apache Airflow on Astronomer
 
-Este projeto tem como objetivo extrair dados da API FIPE utilizando um ambiente Astronomer com Airflow para orquestração das tarefas que facilita o gerenciamento e implantação de fluxos de trabalho.
+Data pipeline that extracts Brazil's average vehicle price tables from the **FIPE API** (*Fundação Instituto de Pesquisas Econômicas* — [veiculos.fipe.org.br](https://veiculos.fipe.org.br/)), orchestrated with **Apache Airflow** running on the **Astronomer** (Astro CLI) environment for easy workflow management and deployment.
 
-![Pipeline do Projeto](docs/pipeline_fipe_api.jpg)
+![Project pipeline](docs/pipeline_fipe_api.jpg)
 
-## Funcionalidades
+## Features
 
-- Extração de tabelas de referência, marcas, modelos e anos dos veículos.
-- Processamento dos dados extraídos e salvamento em formatos JSON e CSV.
-- Implementação de estrutura de logs para monitoramento do processo.
-- Tratamento detalhado de erros durante as requisições à API.
-- Uso do padrão de projeto Template Method para organização do código.
+- Extraction of reference tables, brands, models, model years and price results.
+- Processing of the extracted data and storage as JSON and CSV.
+- Structured logging to monitor each run.
+- Detailed error handling for API requests.
+- **Template Method** design pattern: a base extractor interface defines the flow, and each endpoint implements its own specifics.
 
-## Estrutura do Projeto
+## Project structure
 
-- `main.py`: Arquivo principal para execução dos extratores.
-- `src/api_utils/`: Utilitários para conexão com a API e manipulação de dados.
-- `src/datasources/endpoints/`: Classes específicas para cada endpoint da API.
-- `src/interfaces/`: Interface base para os extratores.
-- `data/raw/`: Pasta onde os dados extraídos são salvos.
-- `logs/`: Pasta onde os logs diários são armazenados.
+```
+├── dags/
+│   ├── extract_data_dag.py              # Airflow DAG
+│   └── include/
+│       ├── interfaces/                  # Base extractor interface (Template Method)
+│       ├── datasources/endpoints/       # One class per FIPE API endpoint
+│       └── api_utils/                   # API connection, config and helper tools
+├── Dockerfile · requirements.txt · packages.txt
+├── airflow_settings.yaml
+└── docs/                                # Pipeline diagram
+```
 
-## Pré-requisitos
+## Prerequisites
 
-- Docker instalado.
+- Docker
+- Astro CLI
 
-## Como Executar no Ubuntu
+## Running on Ubuntu
 
-- Verifique e instale o docker na sua máquina.
+1. Clone the project:
+   ```bash
+   git clone https://github.com/devguilhermecarvalho/astro_api_fipe_extractor.git
+   cd astro_api_fipe_extractor
+   ```
+2. Install the Astro CLI:
+   ```bash
+   curl -sSL https://install.astronomer.io | sudo bash
+   ```
+3. Create the virtual environment and install dependencies:
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
+   pip install -r requirements.txt
+   ```
+4. Start Airflow:
+   ```bash
+   astro dev start
+   ```
+   Then open http://localhost:8080.
+5. In the Airflow UI, enable the `extract_data_dag` DAG and wait for it to run.
+6. Stop the environment:
+   ```bash
+   astro dev stop
+   ```
 
-1. Faça a cópia do projeto:
-<<<<<<< HEAD
+## Contact
 
-   1. CMD: `git clone`
-=======
-   1. CMD: `git clone ...`
->>>>>>> 73f331439874b1f92939c893da97ddf9b8a1dd36
-2. Faça o download e instalação do Astronomer:
-
-   1. CMD: `curl -sSL https://install.astronomer.io | sudo bash`
-3. Preparando o ambiente virtual na pasta do projeto:
-
-   1. Criando ambiente virtual: `python3 -m venv venv`
-   2. Ativando o ambiente virtual: `source venv/bin/activate`
-   3. Instale as bibliotecas: `pip install -r requirements.txt`
-4. Execute o Astronomer:
-
-   1. CMD: `astro dev start`
-   2. Abra o navegador e acesse: http://localhost:8080
-5. Executar a DAG:
-
-   1. Na interface do Airflow, ative a DAG `extract_data_dag` e aguarde sua execução.
-6. Encerre a execução:
-
-   1. CMD: `astro dev stop`
+**Guilherme Carvalho** — Senior Data & AI Engineer
+LinkedIn: [linkedin.com/in/devguilhermecarvalho](https://www.linkedin.com/in/devguilhermecarvalho/)
